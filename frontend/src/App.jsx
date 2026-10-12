@@ -17,6 +17,11 @@ const AdminPage = lazy(() => import('./pages/AdminPage'))
 const SquadsPage = lazy(() => import('./pages/SquadsPage'))
 const ExportPage = lazy(() => import('./pages/ExportPage'))
 const AnalysisPage = lazy(() => import('./pages/AnalysisPage'))
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
+const TermsPage = lazy(() => import('./pages/TermsPage'))
+const AboutPage = lazy(() => import('./pages/AboutPage'))
+const HowItWorksPage = lazy(() => import('./pages/HowItWorksPage'))
+const ContactPage = lazy(() => import('./pages/ContactPage'))
 
 function PageLoader() {
   return (
@@ -139,6 +144,11 @@ export default function App() {
         <Route path="/"                    element={<LandingPage />} />
         <Route path="/login"               element={<LoginPage />} />
         <Route path="/auth/callback"       element={<AuthCallback />} />
+        <Route path="/privacy-policy"      element={<PrivacyPage />} />
+        <Route path="/terms"               element={<TermsPage />} />
+        <Route path="/about"               element={<AboutPage />} />
+        <Route path="/how-it-works"        element={<HowItWorksPage />} />
+        <Route path="/contact"             element={<ContactPage />} />
         <Route path="/setup"               element={<Guard><SetupPage /></Guard>} />
         <Route path="/dashboard"           element={<Guard><DashboardPage /></Guard>} />
         <Route path="/create-room"         element={<Guard><CreateRoomPage /></Guard>} />

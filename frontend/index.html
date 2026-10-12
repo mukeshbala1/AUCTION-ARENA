@@ -25,18 +25,8 @@
   <meta property="og:type" content="website" />
   <meta name="google-adsense-account" content="ca-pub-3543205420609830">
 
-  <!-- AdSense is loaded after first paint to protect mobile LCP/TBT. -->
-  <script>
-    window.addEventListener('load', function () {
-      window.setTimeout(function () {
-        var script = document.createElement('script');
-        script.async = true;
-        script.crossOrigin = 'anonymous';
-        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3543205420069830';
-        document.head.appendChild(script);
-      }, 5000);
-    });
-  </script>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3543205420609830" crossorigin="anonymous"></script>
 
   <!-- Title -->
   <title>Auction Arena - Cricket Auction Game Online | IPL Style Auction Simulator</title>
@@ -83,56 +73,19 @@
 
 <body>
 
-  <!-- Hidden H1 for SEO -->
-  <h1 style="position:absolute; left:-9999px;">
-    Auction Arena Cricket Auction Game Online
-  </h1>
-
   <!-- React App -->
   <div id="root"></div>
 
-  <!-- SEO Content -->
-  <div id="seo-footer" style="
-    text-align:center;
-    font-size:13px;
-    color:#aaa;
-    padding:10px 20px;
-    line-height:1.6;
-  ">
-    Auction Arena is a cricket auction game where you can play auction with friends online.
-    Real-time bidding • Multiplayer auction • No signup • Free auction simulator.
-  </div>
-
-  <!-- Legal Line -->
-  <div id="seo-legal" style="
-    text-align:center;
-    font-size:11px;
-    color:#666;
-    padding-bottom:15px;
-  ">
-    This website is not affiliated with or endorsed by the Indian Premier League (IPL).
-  </div>
-
-  <!-- Show only on landing page -->
-  <script>
-    function checkPath() {
-      const path = window.location.pathname;
-      const show = path === "/" || path === "";
-
-      document.getElementById("seo-footer").style.display = show ? "block" : "none";
-      document.getElementById("seo-legal").style.display = show ? "block" : "none";
-    }
-
-    checkPath();
-
-    window.addEventListener("popstate", checkPath);
-
-    const pushState = history.pushState;
-    history.pushState = function () {
-      pushState.apply(history, arguments);
-      checkPath();
-    };
-  </script>
+  <!-- Accessible site description for crawlers -->
+  <noscript>
+    <div style="text-align:center;font-size:13px;color:#555;padding:10px 20px;line-height:1.8;font-family:sans-serif;">
+      <strong>Auction Arena</strong> — A real-time multiplayer IPL-style cricket auction simulator.
+      Create a room, invite friends, bid on 350+ players with a live 15-second timer, and export your squads to Excel.
+      Supports IPL Cricket, Pro Kabaddi, and World Football auctions. Powered by Gemini AI analysis.
+      <br/>
+      This website is not affiliated with or endorsed by the Indian Premier League (IPL) or any sports body.
+    </div>
+  </noscript>
 
   <script type="module" src="/src/main.jsx"></script>
 

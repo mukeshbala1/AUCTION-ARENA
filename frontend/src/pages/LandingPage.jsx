@@ -195,7 +195,8 @@ export default function LandingPage() {
         <div className="flex items-center gap-4 md:gap-8">
           <a href="#sports" className="text-muted text-xs font-semibold tracking-wide hover:text-white transition-colors hidden sm:block">Arenas</a>
           <a href="#features" className="text-muted text-xs font-semibold tracking-wide hover:text-white transition-colors hidden sm:block">Features</a>
-          <a href="#works" className="text-muted text-xs font-semibold tracking-wide hover:text-white transition-colors hidden sm:block">Works</a>
+          <Link to="/how-it-works" className="text-muted text-xs font-semibold tracking-wide hover:text-white transition-colors no-underline hidden sm:block">Guide</Link>
+          <Link to="/about" className="text-muted text-xs font-semibold tracking-wide hover:text-white transition-colors no-underline hidden sm:block">About</Link>
           <Link to="/login" className="btn-theme text-xs px-5 py-2.5 rounded-full no-underline" style={{padding:'0.6rem 1.4rem',fontSize:'0.8rem'}}>Log in</Link>
         </div>
       </nav>
@@ -407,9 +408,11 @@ export default function LandingPage() {
         </div>
         
         <div className="flex flex-wrap justify-center gap-6 sm:gap-8 order-2 sm:order-3 w-full sm:w-auto">
-          <button onClick={() => setActiveModal('privacy')} className="text-muted text-xs font-medium hover:text-white transition-colors">Privacy</button>
-          <button onClick={() => setActiveModal('terms')} className="text-muted text-xs font-medium hover:text-white transition-colors">Terms</button>
-          <button onClick={() => setActiveModal('contact')} className="text-muted text-xs font-medium hover:text-white transition-colors">Contact</button>
+          <Link to="/about" className="text-muted text-xs font-medium hover:text-white transition-colors no-underline">About</Link>
+          <Link to="/how-it-works" className="text-muted text-xs font-medium hover:text-white transition-colors no-underline">How It Works</Link>
+          <Link to="/privacy-policy" className="text-muted text-xs font-medium hover:text-white transition-colors no-underline">Privacy</Link>
+          <Link to="/terms" className="text-muted text-xs font-medium hover:text-white transition-colors no-underline">Terms</Link>
+          <Link to="/contact" className="text-muted text-xs font-medium hover:text-white transition-colors no-underline">Contact</Link>
           <Link to="/admin" className="text-muted text-xs font-medium hover:text-white transition-colors no-underline">Admin</Link>
         </div>
       </footer>
