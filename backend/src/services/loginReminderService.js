@@ -18,8 +18,8 @@ function getReminderConfig() {
     fromEmail: process.env.RESEND_FROM_EMAIL || 'Auction Arena <onboarding@resend.dev>',
     replyTo: process.env.RESEND_REPLY_TO || undefined,
     appUrl: process.env.FRONTEND_URL || 'https://www.auctionarena.org',
-    inactivityDays: toPositiveInt(process.env.LOGIN_REMINDER_INACTIVE_DAYS, 3),
-    repeatDays: toPositiveInt(process.env.LOGIN_REMINDER_REPEAT_DAYS, 3),
+    inactivityDays: toPositiveInt(process.env.LOGIN_REMINDER_INACTIVE_DAYS, 7),
+    repeatDays: toPositiveInt(process.env.LOGIN_REMINDER_REPEAT_DAYS, 7),
     batchSize: Math.min(toPositiveInt(process.env.LOGIN_REMINDER_BATCH_SIZE, 100), 1000),
   }
 }
@@ -30,49 +30,178 @@ function getLastSignInDate(user) {
   return Number.isFinite(date.getTime()) ? date : null
 }
 
-function buildReminderEmail(user, config) {
-  const name =
-    user.user_metadata?.full_name ||
-    user.user_metadata?.name ||
-    user.email?.split('@')[0] ||
+function getDisplayName(user) {
+  const metadata = user?.user_metadata || {}
+  const raw =
+    metadata.full_name ||
+    metadata.name ||
+    metadata.user_name ||
+    user?.email?.split('@')[0] ||
     'there'
 
-  const safeName = escapeHtml(name)
+  const trimmed = String(raw).trim()
+  if (!trimmed || trimmed.toLowerCase() === 'there') return 'there'
+
+  // Clean email handles like "sbala.work" or "john_doe"
+  if (trimmed.includes('.') || trimmed.includes('_')) {
+    const firstPart = trimmed.split(/[._]/)[0]
+    if (firstPart && firstPart.length > 1) {
+      return firstPart.charAt(0).toUpperCase() + firstPart.slice(1)
+    }
+  }
+
+  // Capitalize first character
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1)
+}
+
+function buildReminderEmail(user, config) {
+  const displayName = getDisplayName(user)
+  const safeName = escapeHtml(displayName)
+  const safeEmail = escapeHtml(user?.email || '')
   const safeAppUrl = escapeHtml(config.appUrl)
-  const subject = 'Your Auction Arena account'
-  const html = `
-    <div style="margin:0;padding:0;background:#ffffff;font-family:Arial,Helvetica,sans-serif;color:#111827">
-      <div style="max-width:560px;margin:0 auto;padding:28px 18px;line-height:1.6;font-size:15px">
-        <p style="margin:0 0 18px">Hi ${safeName},</p>
-        <p style="margin:0 0 18px">This is a quick reminder that your Auction Arena account is still active.</p>
-        <p style="margin:0 0 18px">You can sign in anytime to continue with your rooms, teams, and auctions.</p>
-        <p style="margin:0 0 22px">
-          <a href="${safeAppUrl}" style="color:#1a56db;text-decoration:underline">Open Auction Arena</a>
-        </p>
-        <p style="margin:0 0 18px">If you did not create this account, you can ignore this email.</p>
-        <p style="margin:0">Thanks,<br>Auction Arena</p>
-        <hr style="border:none;border-top:1px solid #e5e7eb;margin:28px 0 16px">
-        <p style="margin:0;color:#6b7280;font-size:12px;line-height:1.5">
-          This message was sent because an Auction Arena account exists for this email address.
-        </p>
-      </div>
-    </div>
-  `
+
+  const subject =
+    displayName && displayName.toLowerCase() !== 'there'
+      ? `Your Auction Arena squad is waiting, ${displayName}`
+      : 'Your Auction Arena squad is waiting'
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(subject)}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f8fafc;-webkit-font-smoothing:antialiased;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1e293b;">
+  <!-- Hidden preheader text to control preview snippet in inbox -->
+  <div style="display:none;font-size:1px;color:#f8fafc;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;">
+    Your live cricket auction room and custom squads are ready for you whenever you want to draft.
+  </div>
+
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#f8fafc;padding:32px 12px;">
+    <tr>
+      <td align="center">
+        <!-- Main Card Container -->
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:560px;background-color:#ffffff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.06);">
+          
+          <!-- Header Bar -->
+          <tr>
+            <td style="padding:28px 32px 20px;border-bottom:1px solid #f1f5f9;background-color:#ffffff;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td>
+                    <span style="font-size:18px;font-weight:800;letter-spacing:-0.3px;color:#0f172a;">
+                      AUCTION <span style="color:#ea580c;">ARENA</span>
+                    </span>
+                  </td>
+                  <td align="right">
+                    <span style="display:inline-block;padding:4px 10px;font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:#ea580c;background-color:#fff7ed;border:1px solid #fed7aa;border-radius:20px;">
+                      Cricket Simulator
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Email Body Content -->
+          <tr>
+            <td style="padding:28px 32px;background-color:#ffffff;">
+              <h1 style="margin:0 0 16px;font-size:20px;font-weight:700;line-height:1.35;color:#0f172a;">
+                Your arena is waiting for the next auction
+              </h1>
+
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#334155;">
+                Hi ${safeName},
+              </p>
+
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#334155;">
+                It has been a little while since your last visit to Auction Arena. We wanted to check in and let you know that your account and saved settings are ready whenever you want to draft.
+              </p>
+
+              <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#334155;">
+                Whether you want to run a live IPL-style mega auction with friends or test bidding strategies within your virtual purse, your arena is ready:
+              </p>
+
+              <!-- Feature Highlights Box -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin:0 0 24px;">
+                <tr>
+                  <td style="padding:14px 16px 8px;">
+                    <div style="font-size:14px;line-height:1.5;color:#1e293b;margin-bottom:8px;">
+                      <strong style="color:#0f172a;">Live Auction Rooms:</strong> Create a room in seconds and invite friends with a simple 6-letter room code — no app download required.
+                    </div>
+                    <div style="font-size:14px;line-height:1.5;color:#1e293b;margin-bottom:8px;">
+                      <strong style="color:#0f172a;">350+ Cricket Players:</strong> Realistic bidding pools, updated stats, and custom overseas player limits.
+                    </div>
+                    <div style="font-size:14px;line-height:1.5;color:#1e293b;">
+                      <strong style="color:#0f172a;">Real-Time Action:</strong> Instant bidding, squad tracking, and live squad breakdown tools.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Call to Action Button -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:24px 0 20px;">
+                <tr>
+                  <td align="center">
+                    <a href="${safeAppUrl}" style="background-color:#ea580c;color:#ffffff;display:inline-block;padding:13px 32px;font-size:15px;font-weight:600;text-decoration:none;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,0.06);text-align:center;">
+                      Open Auction Arena &rarr;
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 20px;font-size:13px;line-height:1.5;color:#64748b;text-align:center;">
+                Or jump in directly at: <a href="${safeAppUrl}" style="color:#ea580c;text-decoration:underline;">${safeAppUrl}</a>
+              </p>
+
+              <p style="margin:0 0 4px;font-size:14px;line-height:1.5;color:#334155;">
+                See you on the pitch,
+              </p>
+              <p style="margin:0;font-size:14px;font-weight:600;color:#0f172a;">
+                The Auction Arena Team
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:20px 32px;background-color:#f8fafc;border-top:1px solid #e2e8f0;">
+              <p style="margin:0 0 6px;font-size:12px;line-height:1.5;color:#64748b;">
+                You received this email because an Auction Arena account exists for <span style="color:#334155;font-weight:500;">${safeEmail}</span>.
+              </p>
+              <p style="margin:0;font-size:12px;line-height:1.5;color:#94a3b8;">
+                If you did not create this account or no longer wish to receive check-ins, you can safely disregard this message.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+
   const text = [
-    `Hi ${name},`,
+    `Hi ${displayName},`,
     '',
-    'This is a quick reminder that your Auction Arena account is still active.',
+    'It has been a little while since your last visit to Auction Arena. We wanted to check in and let you know that your account and saved settings are ready whenever you want to draft.',
     '',
-    'You can sign in anytime to continue with your rooms, teams, and auctions.',
+    'Whether you want to run a live IPL-style mega auction with friends or test bidding strategies within your virtual purse, your arena is ready:',
+    '',
+    '- Live Auction Rooms: Create a room in seconds and invite friends with a simple 6-letter room code — no app download required.',
+    '- 350+ Cricket Players: Realistic bidding pools, updated stats, and custom overseas player limits.',
+    '- Real-Time Action: Instant bidding, squad tracking, and live squad breakdown tools.',
     '',
     `Open Auction Arena: ${config.appUrl}`,
     '',
-    'If you did not create this account, you can ignore this email.',
+    'See you on the pitch,',
+    'The Auction Arena Team',
     '',
-    'Thanks,',
-    'Auction Arena',
-    '',
-    'This message was sent because an Auction Arena account exists for this email address.',
+    '---',
+    `You received this email because an Auction Arena account exists for ${user.email || 'your email address'}.`,
+    'If you did not create this account or no longer wish to receive check-ins, you can safely disregard this message.',
   ].join('\n')
 
   return { subject, html, text }
@@ -89,16 +218,24 @@ function escapeHtml(value) {
 
 async function sendEmail(user, config) {
   const email = buildReminderEmail(user, config)
+  const payload = {
+    from: config.fromEmail,
+    to: [user.email],
+    subject: email.subject,
+    html: email.html,
+    text: email.text,
+    headers: {
+      'X-Entity-Ref-ID': `reminder-${user.id}-${Date.now()}`,
+    },
+  }
+
+  if (config.replyTo) {
+    payload.reply_to = config.replyTo
+  }
+
   await axios.post(
     'https://api.resend.com/emails',
-    {
-      from: config.fromEmail,
-      to: [user.email],
-      reply_to: config.replyTo,
-      subject: email.subject,
-      html: email.html,
-      text: email.text,
-    },
+    payload,
     {
       headers: {
         Authorization: `Bearer ${config.apiKey}`,
@@ -232,6 +369,11 @@ function startLoginReminderScheduler(supabase) {
 }
 
 module.exports = {
+  buildReminderEmail,
+  shouldSendReminder,
+  getReminderConfig,
+  getDisplayName,
   runLoginReminderSweep,
   startLoginReminderScheduler,
 }
+
