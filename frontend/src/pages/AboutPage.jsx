@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const TEAM = [
@@ -34,6 +35,10 @@ const MILESTONES = [
 ]
 
 export default function AboutPage() {
+  useEffect(() => {
+    document.title = 'About Us - Free Cricket Auction Game Creators | Auction Arena'
+  }, [])
+
   return (
     <div className="min-h-screen bg-bg text-text" style={{ fontFamily: "'DM Sans', sans-serif" }}>
 

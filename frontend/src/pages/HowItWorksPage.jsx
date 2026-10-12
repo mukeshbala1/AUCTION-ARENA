@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const STEPS_DETAILED = [
@@ -80,6 +81,10 @@ const FAQ = [
 ]
 
 export default function HowItWorksPage() {
+  useEffect(() => {
+    document.title = 'How It Works - Free Cricket Auction Game Guide & Rules | Auction Arena'
+  }, [])
+
   return (
     <div className="min-h-screen bg-bg text-text" style={{ fontFamily: "'DM Sans', sans-serif" }}>
 

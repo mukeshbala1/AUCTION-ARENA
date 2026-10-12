@@ -30,6 +30,33 @@ const STEPS = [
   ['5', 'Analysis & Export', 'After the unsold round, view your AI squad analysis or download the full auction results as an Excel file.'],
 ]
 
+const LANDING_FAQ = [
+  {
+    q: 'Is Auction Arena a 100% free cricket auction game?',
+    a: 'Yes, Auction Arena is completely free to play online. You can create unlimited auction rooms, invite up to 10 friends, bid on 350+ cricket players, and use all premium features like live AI commentary and Excel squad export at zero cost.'
+  },
+  {
+    q: 'How do I play the cricket auction game online with friends?',
+    a: 'Click "Create Room", select IPL Cricket, customize your team purse (e.g. ₹120 Crore), and share your 6-character room code with friends. They can enter the code on the homepage, choose a team name, and immediately participate in the live 15-second bidding war!'
+  },
+  {
+    q: 'What other auction-related games can I play for free?',
+    a: 'In addition to our flagship IPL Cricket Auction game, you can play the Pro Kabaddi League (PKL) auction simulation and World Football transfer bidding arena featuring 500+ global stars. All sports modes are completely free.'
+  },
+  {
+    q: 'How does the live bidding timer and team purse work?',
+    a: 'Every player nomination triggers a synchronized 15-second server countdown. Teams place bids in ₹25 Lakh or ₹50 Lakh increments. The system strictly enforces the ₹120 Crore budget and the 8-overseas player restriction so nobody overspends or breaks the rules.'
+  },
+  {
+    q: 'Can I export my cricket auction squads to Excel?',
+    a: 'Yes! At the end of the auction, click the Export button to instantly download a formatted .xlsx spreadsheet with complete squad rosters, purchase prices, remaining purse, and overseas player statistics.'
+  },
+  {
+    q: 'Do my friends need to install an app or create an account?',
+    a: 'No! Auction Arena runs 100% inside any web browser on mobile phones, tablets, or computers. Friends do not need to download an app or register — only the room host signs in to manage room settings.'
+  }
+]
+
 const WEB3FORMS_ACCESS_KEY = '5a7d81b6-3b40-470d-bf3c-8b4e3be462f3'
 const DONATION_SUPPORT_URL = 'https://rzp.io/rzp/wPL9hBPr'
 
@@ -65,12 +92,17 @@ export default function LandingPage() {
   }
 
   const [activeModal, setActiveModal] = useState(null)
+  const [openFaq, setOpenFaq] = useState(0)
   const [isSubmittingContact, setIsSubmittingContact] = useState(false)
   const [showContactThankYou, setShowContactThankYou] = useState(false)
   const [showDonationThankYou, setShowDonationThankYou] = useState(false)
   const isDonationReturn = useRef(
     typeof window !== 'undefined' && isSuccessfulDonationReturn(window.location.search)
   )
+
+  useEffect(() => {
+    document.title = 'Cricket Auction Game Free | Live IPL Auction Simulator - Auction Arena'
+  }, [])
 
   useEffect(() => {
     let mounted = true
@@ -195,6 +227,7 @@ export default function LandingPage() {
         <div className="flex items-center gap-4 md:gap-8">
           <a href="#sports" className="text-muted text-xs font-semibold tracking-wide hover:text-white transition-colors hidden sm:block">Arenas</a>
           <a href="#features" className="text-muted text-xs font-semibold tracking-wide hover:text-white transition-colors hidden sm:block">Features</a>
+          <a href="#faq" className="text-muted text-xs font-semibold tracking-wide hover:text-white transition-colors hidden sm:block">FAQ</a>
           <Link to="/how-it-works" className="text-muted text-xs font-semibold tracking-wide hover:text-white transition-colors no-underline hidden sm:block">Guide</Link>
           <Link to="/about" className="text-muted text-xs font-semibold tracking-wide hover:text-white transition-colors no-underline hidden sm:block">About</Link>
           <Link to="/login" className="btn-theme text-xs px-5 py-2.5 rounded-full no-underline" style={{padding:'0.6rem 1.4rem',fontSize:'0.8rem'}}>Log in</Link>
@@ -221,12 +254,14 @@ export default function LandingPage() {
           </span>
         </div>
         
-        <h1 className="font-sans font-semibold leading-[1.1] anim-2 text-white" style={{fontSize:'clamp(3.5rem,10vw,7rem)',letterSpacing:'-0.03em'}}>
-          Effortless Bidding<br/>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5A00] to-[#F59E0B]">for Everyone.</span>
+        <h1 className="font-sans font-semibold leading-[1.08] anim-2 text-white" style={{fontSize:'clamp(2.75rem,7.5vw,5.5rem)',letterSpacing:'-0.03em'}}>
+          Free Cricket Auction Game<br/>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5A00] to-[#F59E0B]">Live IPL Bidding Simulator.</span>
         </h1>
         
-        <p className="text-muted text-sm sm:text-lg max-w-2xl mt-6 leading-relaxed anim-3 px-4 font-medium">Host live IPL-style auctions with friends. Real bidding, AI announcer, Gemini analysis — just like the pros, without touching a spreadsheet.</p>
+        <p className="text-muted text-sm sm:text-lg max-w-2xl mt-6 leading-relaxed anim-3 px-4 font-medium">
+          Play the #1 free cricket auction game online with friends! Host live IPL-style bidding wars, manage a ₹120 Crore team purse, bid on 350+ players with live AI commentary and Excel squad exports — 100% free in your browser.
+        </p>
         
         <div className="flex flex-col sm:flex-row gap-4 mt-10 w-full sm:w-auto justify-center anim-4 px-4">
           <Link to="/login" className="btn-theme no-underline w-full sm:w-auto justify-center" style={{padding:'1rem 2.4rem',fontSize:'1rem'}}>Get started</Link>
@@ -330,13 +365,31 @@ export default function LandingPage() {
         </div>
       </section>
     
-      <section className="defer-render relative z-10 max-w-5xl mx-auto px-4 md:px-8 pb-32 text-center">
-        <h1 className="font-sans font-semibold text-3xl sm:text-4xl tracking-tight mb-6 text-white">
-          The ultimate live auction experience.
-        </h1>
-        <p className="text-muted text-sm sm:text-base leading-relaxed mb-6 font-medium max-w-2xl mx-auto">
-          Auction Arena is a real-time platform where users can experience IPL-style bidding with friends. Join or create a room, manage your purse, and outsmart your rivals.
+      <section className="defer-render relative z-10 max-w-5xl mx-auto px-4 md:px-8 pb-24 text-center">
+        <span className="text-[#FF5A00] text-xs font-bold uppercase tracking-widest mb-3 block">Why Play Auction Arena</span>
+        <h2 className="font-sans font-semibold text-3xl sm:text-4xl md:text-5xl tracking-tight mb-6 text-white">
+          The Internet's #1 Free Cricket Auction Game
+        </h2>
+        <p className="text-muted text-sm sm:text-base leading-relaxed mb-10 font-medium max-w-3xl mx-auto">
+          Auction Arena brings the excitement of the IPL Mega Auction directly to your browser. Play with friends in real time, build your dream squad within the ₹120 Crore purse, adhere to the 8 overseas player limit, and let Gemini AI rank your final team. Best of all, it is 100% free with no apps to download.
         </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
+          <div className="p-6 rounded-2xl" style={{background:'rgba(255,255,255,0.02)',border:'1px solid rgba(255,255,255,0.06)'}}>
+            <div className="text-2xl mb-3">🏏</div>
+            <h3 className="text-white font-semibold text-base mb-2">Authentic IPL Rules</h3>
+            <p className="text-muted text-xs leading-relaxed font-medium">₹120 Crore virtual budget, 350+ capped and uncapped cricketers, and automatic 8-overseas cap enforcement.</p>
+          </div>
+          <div className="p-6 rounded-2xl" style={{background:'rgba(255,255,255,0.02)',border:'1px solid rgba(255,255,255,0.06)'}}>
+            <div className="text-2xl mb-3">⚡</div>
+            <h3 className="text-white font-semibold text-base mb-2">Zero-Lag Multiplayer</h3>
+            <p className="text-muted text-xs leading-relaxed font-medium">Socket.io WebSocket technology keeps all participants in sync with a tamper-proof 15-second server timer.</p>
+          </div>
+          <div className="p-6 rounded-2xl" style={{background:'rgba(255,255,255,0.02)',border:'1px solid rgba(255,255,255,0.06)'}}>
+            <div className="text-2xl mb-3">🆓</div>
+            <h3 className="text-white font-semibold text-base mb-2">100% Free Forever</h3>
+            <p className="text-muted text-xs leading-relaxed font-medium">No paywalls, no credits, no limits. Create rooms, invite friends, and enjoy unlimited auctions anytime.</p>
+          </div>
+        </div>
       </section>
 
       <section id="works" className="defer-render relative z-10 max-w-7xl mx-auto px-4 md:px-8 pb-32">
@@ -351,6 +404,54 @@ export default function LandingPage() {
               <div className="text-muted text-xs leading-relaxed font-medium">{desc}</div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* FAQ SECTION */}
+      <section id="faq" className="defer-render relative z-10 max-w-5xl mx-auto px-4 md:px-8 pb-32">
+        <div className="text-center mb-12">
+          <span className="text-[#FF5A00] text-xs font-bold uppercase tracking-widest mb-3 block">Got Questions?</span>
+          <h2 className="font-sans font-semibold text-3xl sm:text-4xl md:text-5xl tracking-tight text-white mb-4">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-muted text-sm sm:text-base max-w-xl mx-auto font-medium">
+            Everything you need to know about playing our free cricket auction game and hosting tournaments with friends.
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          {LANDING_FAQ.map((faq, idx) => {
+            const isOpen = openFaq === idx
+            return (
+              <div
+                key={faq.q}
+                className="rounded-2xl transition-all duration-200 overflow-hidden"
+                style={{
+                  background: isOpen ? 'rgba(255,90,0,0.04)' : 'rgba(255,255,255,0.02)',
+                  border: isOpen ? '1px solid rgba(255,90,0,0.3)' : '1px solid rgba(255,255,255,0.06)'
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFaq(isOpen ? null : idx)}
+                  className="w-full p-6 text-left flex items-center justify-between gap-4 transition-colors"
+                >
+                  <span className="text-white font-semibold text-base sm:text-lg">{faq.q}</span>
+                  <span
+                    className="text-[#FF5A00] text-xl transition-transform duration-200 shrink-0"
+                    style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                  >
+                    ↓
+                  </span>
+                </button>
+                {isOpen && (
+                  <div className="px-6 pb-6 text-muted text-sm sm:text-base leading-relaxed font-medium border-t border-white/5 pt-4">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            )
+          })}
         </div>
       </section>
 

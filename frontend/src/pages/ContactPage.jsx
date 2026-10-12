@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const WEB3FORMS_ACCESS_KEY = '5a7d81b6-3b40-470d-bf3c-8b4e3be462f3'
@@ -10,6 +10,10 @@ const CONTACT_ITEMS = [
 ]
 
 export default function ContactPage() {
+  useEffect(() => {
+    document.title = 'Contact Us - Auction Arena Support | Cricket Auction Game'
+  }, [])
+
   const [status, setStatus] = useState('idle') // idle | sending | success | error
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
 

@@ -1,8 +1,13 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const LAST_UPDATED = 'October 2026'
 
 export default function PrivacyPage() {
+  useEffect(() => {
+    document.title = 'Privacy Policy | Auction Arena'
+  }, [])
+
   return (
     <div className="min-h-screen bg-bg text-text" style={{ fontFamily: "'DM Sans', sans-serif" }}>
 
