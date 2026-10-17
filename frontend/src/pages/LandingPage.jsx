@@ -221,7 +221,7 @@ export default function LandingPage() {
       <div className="orb" style={{width:'120vw', height:'70vh', background:'radial-gradient(ellipse at bottom, rgba(255, 120, 0, 0.2) 0%, rgba(204, 72, 0, 0.05) 40%, transparent 70%)', bottom:'-20%', left:'-10%', filter:'blur(140px)'}}/>
 
       {/* NAV */}
-      <nav className="landing-nav fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-10 py-5"
+      <nav className="landing-nav fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-10 py-3.5 sm:py-5"
            style={{background:'rgba(10,5,0,0.7)',backdropFilter:'blur(24px)',borderBottom:'1px solid rgba(255,255,255,0.05)'}}>
         <span className="font-bebas text-xl sm:text-2xl tracking-[2px] sm:tracking-[4px] text-white">AUCTION<span className="text-[#FF5A00]"> ARENA</span></span>
         <div className="flex items-center gap-4 md:gap-8">
@@ -235,7 +235,7 @@ export default function LandingPage() {
       </nav>
 
       {/* HERO */}
-      <section className="relative z-10 min-h-screen flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-16 md:pt-20">
+      <section className="relative z-10 min-h-screen flex flex-col items-center justify-start md:justify-center text-center px-4 sm:px-6 pt-24 sm:pt-28 md:pt-32 pb-12">
 
         {showDonationThankYou && (
           <div
@@ -246,7 +246,7 @@ export default function LandingPage() {
           </div>
         )}
 
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 anim-1 max-w-full text-left sm:text-center"
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 anim-1 max-w-full text-left sm:text-center mt-2 sm:mt-0"
             style={{background:'rgba(255,255,255,0.03)',border:'1px solid rgba(255,255,255,0.1)'}}>
           <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A00] shrink-0" style={{animation:'pulse 2s infinite'}}/>
           <span className="text-[#FF5A00] text-[10px] sm:text-xs tracking-[1px] uppercase font-semibold truncate">
