@@ -154,4 +154,4 @@ npm run build
 | `/unsold/:code` | Unsold Players Round |
 | `/squads/:code` | Final Squads Overview |
 | `/export/:code` | Excel Export |
-| `/analysis/:code` | 🤖 Claude AI Analysis |
+| `/analysis/:code` | 🤖 Gemini AI Analysis |
